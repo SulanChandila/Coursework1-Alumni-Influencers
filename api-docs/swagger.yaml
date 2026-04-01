@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  title: Eastminster University Alumni API
+  description: API for managing alumni profiles, authentication, the Featured Alumnus blind bidding system, and usage statistics.
+  version: 1.0.0
+servers:
+  - url: http://localhost/alumini_api_cw/index.php
+    description: Local Development Server (With index.php)
+  - url: http://localhost/alumini_api_cw/api
+    description: Local Development Server (If using .htaccess to remove index.php)
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new alumni account
+      security: [] # No auth required
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john.doe@eastminster.ac.uk
+                password:
+                  type: string
+                  example: StrongPass123!
+      responses:
+        '201':
+          description: Registration successful
+        '400':
+          description: Validation error
+        '409':
+          description: Email already exists
+
+  /auth/login:
+    post:
+      summary: Login and receive a Bearer token
+      security: []
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john.doe@eastminster.ac.uk
+                password:
+                  type: string
+                  example: StrongPass123!
+      responses:
+        '200':
+          description: Login successful, returns Bearer token
+        '401':
+          description: Invalid credentials
+        '403':
+          description: Email not verified
+
+  /auth/logout:
+    post:
+      summary: Logout and revoke token
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Logged out successfully
+
+  /auth/verify:
+    post:
+      summary: Verify email address via token
+      security: []
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Email verified
+
+  /auth/forgot_password:
+    post:
+      summary: Request a password reset link
+      security: []
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Reset link sent
+
+  /auth/reset_password:
+    post:
+      summary: Reset password using token
+      security: []
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Password reset successfully
+
+  /profile:
+    get:
+      summary: Get user profile details
+      description: Retrieves the current user's basic profile, degrees, qualifications, and employment history.
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: Profile retrieved successfully
+        '404':
+          description: Profile not found
+        '401':
+          description: Unauthorized / Session Timeout
+
+  /profile/update:
+    post:
+      summary: Update basic profile information
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+                bio:
+                  type: string
+                  example: Software Engineer with 10 years experience.
+                linkedin_url:
+                  type: string
+                  example: https://linkedin.com/in/johndoe
+      responses:
+        '200':
+          description: Profile updated successfully
+        '400':
+          description: Validation error
+
+  /profile/upload_image:
+    post:
+      summary: Upload a profile picture
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profile_image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Image uploaded successfully
+        '400':
+          description: Upload failed (e.g., file too large, invalid format)
+
+  /profile/add_degree:
+    post:
+      summary: Add a new university degree
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                degree_name:
+                  type: string
+                  example: BSc Computer Science
+                institution:
+                  type: string
+                  example: Eastminster University
+                completion_date:
+                  type: string
+                  format: date
+                  example: "2020-07-15"
+                official_url:
+                  type: string
+                  example: https://eastminster.ac.uk/verify/123
+      responses:
+        '201':
+          description: Degree added successfully
+        '400':
+          description: Validation error
+
+  /profile/delete_degree/{id}:
+    delete:
+      summary: Delete a degree
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The ID of the degree to delete
+      responses:
+        '200':
+          description: Degree deleted
+        '404':
+          description: Degree not found or unauthorized
+
+  /profile/add_qualification:
+    post:
+      summary: Add a professional qualification
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [certification, licence, short_course]
+                  example: certification
+                title:
+                  type: string
+                  example: AWS Certified Solutions Architect
+                awarding_body:
+                  type: string
+                  example: Amazon Web Services
+                url:
+                  type: string
+                  example: https://aws.amazon.com/verify/abc
+                completion_date:
+                  type: string
+                  format: date
+                  example: "2023-01-10"
+      responses:
+        '201':
+          description: Qualification added successfully
+
+  /profile/delete_qualification/{id}:
+    delete:
+      summary: Delete a qualification
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Qualification deleted
+
+  /profile/add_employment:
+    post:
+      summary: Add employment history
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: string
+                  example: Tech Corp
+                role:
+                  type: string
+                  example: Senior Developer
+                start_date:
+                  type: string
+                  format: date
+                  example: "2021-02-01"
+                end_date:
+                  type: string
+                  format: date
+                  example: "2025-05-01"
+                  description: Leave empty if currently employed
+      responses:
+        '201':
+          description: Employment record added
+
+  /profile/delete_employment/{id}:
+    delete:
+      summary: Delete an employment record
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Employment record deleted
+
+  /profile/change_password:
+    post:
+      summary: Change user password
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                new_password:
+                  type: string
+      responses:
+        '200':
+          description: Password updated successfully
+        '400':
+          description: Validation error or incorrect current password
+
+  /bid:
+    get:
+      summary: Get user's bid history
+      tags:
+        - Bidding
+      responses:
+        '200':
+          description: Returns an array of user bids
+
+  /bid/place:
+    post:
+      summary: Place or increase a blind bid
+      tags:
+        - Bidding
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_date:
+                  type: string
+                  format: date
+                  example: "2026-12-01"
+                bid_amount:
+                  type: number
+                  example: 50.00
+      responses:
+        '200':
+          description: Bid placed successfully
+        '400':
+          description: Validation error (e.g., bid too low, monthly limit reached)
+
+  /featured/index/{date}:
+    get:
+      summary: Get featured alumnus by date
+      description: Public endpoint to retrieve the profile of the alumnus who won the bid for a specific date (defaults to today if left blank). No authentication required.
+      security: [] # Overrides global lock to make it public
+      tags:
+        - Public Developer API
+      parameters:
+        - in: path
+          name: date
+          schema:
+            type: string
+            format: date
+          required: false
+          description: "Target date in YYYY-MM-DD format (e.g., 2026-03-30)"
+      responses:
+        '200':
+          description: Successfully retrieved featured profile
+        '404':
+          description: No featured alumnus found for this date
+        '429':
+          description: Rate limit exceeded
+          
+  /admin/stats:
+    get:
+      summary: View API usage and system statistics
+      description: Returns active user sessions, popular endpoints, and recent API request logs.
+      tags:
+        - Admin / Statistics
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      active_sessions:
+                        type: integer
+                      endpoint_popularity:
+                        type: array
+                        items:
+                          type: object
+                      recent_api_calls:
+                        type: array
+                        items:
+                          type: object
+
+  /admin/revoke:
+    post:
+      summary: Revoke a specific authentication token
+      description: Forcefully invalidates a specific user's Bearer token.
+      tags:
+        - Admin / Statistics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token_to_revoke:
+                  type: string
+                  example: "jwt_or_bearer_token_string_here"
+      responses:
+        '200':
+          description: Token successfully revoked
+        '400':
+          description: Missing parameters
+        '404':
+          description: Token not found or already revoked     
