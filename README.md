@@ -17,7 +17,12 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 1. Create a new MySQL database named `cw1_alumini_influencers`.
 2. Import the provided `.sql` database dump file to generate the required tables, relationships, and sample data.
 
-### 2. Environment Configuration (.env)
+📖 2. API Documentation (Swagger)
+* **Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the 
+api-docs/swagger.yamlfile included in this repository.**
+
+
+### 3. Environment Configuration (.env)
 This project uses environment variables for secure configuration. **Do not hardcode credentials in the CodeIgniter config files.**
 
 1. Place the `alumini_api_cw` folder into your local server's web root (e.g., `htdocs` for XAMPP or `www` for WAMP).
@@ -44,10 +49,6 @@ SMTP_HOST="sandbox.smtp.mailtrap.io"
 SMTP_USER="your_mailtrap_username"
 SMTP_PASS="your_mailtrap_password"
 
-
-📖 API Documentation (Swagger)
-* **Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the 
-api-docs/swagger.yamlfile included in this repository.**
 
 
 
