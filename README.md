@@ -17,9 +17,9 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 1. Create a new MySQL database named `cw1_alumini_influencers`.
 2. Import the provided `.sql` database dump file to generate the required tables, relationships, and sample data.
 
-📖 2. API Documentation (Swagger)
+### 2. API Documentation (Swagger) 📖
 * **Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the 
-api-docs/swagger.yamlfile included in this repository.**
+api-docs/swagger.yaml file included in this repository.**
 
 
 ### 3. Environment Configuration (.env)
