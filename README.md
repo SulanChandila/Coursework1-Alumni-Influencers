@@ -1,8 +1,8 @@
 # Eastminster University Alumni API
 
-This repository contains the backend API and frontend Augmented Reality (AR) client for the Eastminster University Featured Alumnus System. 
+This repository contains the backend API for the Eastminster University Featured Alumnus System. 
 
-The core of this project is a RESTful, **client-agnostic** PHP API built with CodeIgniter 3. It manages user authentication, profile data, and a secure "blind bidding" system where alumni can bid to be featured on specific dates. A separate A-Frame AR client consumes this API to project the winning alumnus's profile over a Hiro marker.
+The core of this project is a RESTful, **client-agnostic** PHP API built with CodeIgniter 3. It manages user authentication, profile data, and a secure "blind bidding" system where alumni can bid to be featured on specific dates.
 
 # 🌟 Key Features
 * **Client-Agnostic API:** The public API endpoints return clean, structured JSON, completely independent of the frontend implementation.
@@ -10,8 +10,6 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 * **Advanced Blind Bidding System:** Alumni can place hidden monetary bids for specific future dates.
 * **Smart Monthly Limits:** Users are capped at 3 featured wins per month (or 4 if they have attended a university event). The system automatically skips high bidders who have already reached their monthly cap.
 * **Automated Cron Resolution:** A built-in cron controller resolves bids daily, automatically selecting eligible winners and sending email notifications via SMTP.
-* **AR Web Client:** A modern 3-column AR interface built with A-Frame and AR.js to visualize the JSON data.
-
 
 ## 🛠 Installation & Setup
 
@@ -19,7 +17,12 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 1. Create a new MySQL database named `cw1_alumini_influencers`.
 2. Import the provided `database.sql` file located in the root directory of this repository to automatically generate the required tables, relationships, and dummy data.
 
-### 2. Environment Configuration (.env)
+### 2. API Documentation (Swagger) 📖
+* **Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the 
+api-docs/swagger.yaml file included in this repository.**
+
+
+### 3. Environment Configuration (.env)
 This project uses environment variables for secure configuration. **Do not hardcode credentials in the CodeIgniter config files.**
 
 1. Place the `alumini_api_cw` folder into your local server's web root (e.g., `htdocs` for XAMPP or `www` for WAMP).
@@ -47,7 +50,6 @@ SMTP_USER="your_mailtrap_username"
 SMTP_PASS="your_mailtrap_password"
 
 
-📖 API Documentation (Swagger)
-Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the api-docs/swagger.yaml file included in this repository.
+
 
 
