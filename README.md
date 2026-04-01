@@ -1,8 +1,8 @@
 # Eastminster University Alumni API
 
-This repository contains the backend API and frontend Augmented Reality (AR) client for the Eastminster University Featured Alumnus System. 
+This repository contains the backend API for the Eastminster University Featured Alumnus System. 
 
-The core of this project is a RESTful, **client-agnostic** PHP API built with CodeIgniter 3. It manages user authentication, profile data, and a secure "blind bidding" system where alumni can bid to be featured on specific dates. A separate A-Frame AR client consumes this API to project the winning alumnus's profile over a Hiro marker.
+The core of this project is a RESTful, **client-agnostic** PHP API built with CodeIgniter 3. It manages user authentication, profile data, and a secure "blind bidding" system where alumni can bid to be featured on specific dates.
 
 # 🌟 Key Features
 * **Client-Agnostic API:** The public API endpoints return clean, structured JSON, completely independent of the frontend implementation.
