@@ -17,7 +17,7 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 
 ### 1. Database Setup
 1. Create a new MySQL database named `cw1_alumini_influencers`.
-2. Import the provided `.sql` database dump file to generate the required tables, relationships, and sample data.
+2. Import the provided `database.sql` file located in the root directory of this repository to automatically generate the required tables, relationships, and dummy data.
 
 ### 2. Environment Configuration (.env)
 This project uses environment variables for secure configuration. **Do not hardcode credentials in the CodeIgniter config files.**

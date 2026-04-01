@@ -30,3 +30,13 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+
+# Ignore the real environment file
+.env
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore vendor folders if you used Composer
+vendor/
