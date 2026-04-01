@@ -10,8 +10,6 @@ The core of this project is a RESTful, **client-agnostic** PHP API built with Co
 * **Advanced Blind Bidding System:** Alumni can place hidden monetary bids for specific future dates.
 * **Smart Monthly Limits:** Users are capped at 3 featured wins per month (or 4 if they have attended a university event). The system automatically skips high bidders who have already reached their monthly cap.
 * **Automated Cron Resolution:** A built-in cron controller resolves bids daily, automatically selecting eligible winners and sending email notifications via SMTP.
-* **AR Web Client:** A modern 3-column AR interface built with A-Frame and AR.js to visualize the JSON data.
-
 
 ## 🛠 Installation & Setup
 
@@ -48,6 +46,9 @@ SMTP_PASS="your_mailtrap_password"
 
 
 📖 API Documentation (Swagger)
-Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the api-docs/swagger.yaml file included in this repository.
+* **Full API documentation, including request bodies, security schemas (Bearer Auth), and endpoint descriptions, is available in the 
+api-docs/swagger.yamlfile included in this repository.**
+
+
 
 
