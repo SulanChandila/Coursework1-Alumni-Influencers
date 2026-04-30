@@ -84,3 +84,8 @@ $route['api/bids/place'] = 'bid/place'; //POST
 //Public Featured Alumni routes
 $route['api/featured']        = 'featured/index'; 
 $route['api/featured/(:any)'] = 'featured/index/$1';
+
+//Client Endpoints
+$route['api/ar/alumni-of-day']    = 'ar_app/get_alumni_of_day';
+$route['api/analytics/dashboard'] = 'analytics/dashboard_data';
+$route['api/analytics/alumni']    = 'analytics/alumni_list';

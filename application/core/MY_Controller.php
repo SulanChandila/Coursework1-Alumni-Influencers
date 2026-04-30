@@ -53,6 +53,45 @@ class API_Controller extends CI_Controller {
         $this->log_api_usage($this->current_user_id);
     }
 
+    // Application/Client API Key Scoping
+    protected function require_scope($required_scope) {
+        $headers = $this->input->request_headers();
+        
+        // Handle varying header capitalization
+        $api_key = isset($headers['x-api-key']) ? $headers['x-api-key'] : (isset($headers['X-Api-Key']) ? $headers['X-Api-Key'] : null);
+
+        if (!$api_key) {
+            $this->output->set_status_header(401)
+                 ->set_output(json_encode(['error' => 'Missing x-api-key header for client application.']))
+                 ->_display();
+            exit();
+        }
+
+        // Load the new model and check the key
+        $this->load->model('Api_client_model');
+        $client = $this->Api_client_model->get_client_by_key($api_key);
+
+        if (!$client) {
+            $this->output->set_status_header(401)
+                 ->set_output(json_encode(['error' => 'Invalid or inactive client API key.']))
+                 ->_display();
+            exit();
+        }
+
+        // Validate the specific permission scope
+        $allowed_scopes = json_decode($client->scopes, true);
+        
+        if (!is_array($allowed_scopes) || !in_array($required_scope, $allowed_scopes)) {
+            $this->output->set_status_header(403) // 403 Forbidden is specifically required by the rubric
+                 ->set_output(json_encode(['error' => "Forbidden: Your client app does not have the [{$required_scope}] permission."]))
+                 ->_display();
+            exit();
+        }
+
+        // Optional: You could log the client API usage here as well!
+        return $client;
+    }
+
     // Helper to enforce rate limiting (60 requests per minute)
     protected function enforce_rate_limit($ip_address) {
         $one_minute_ago = date('Y-m-d H:i:s', strtotime('-1 minute'));
