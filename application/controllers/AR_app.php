@@ -13,9 +13,8 @@ class Ar_app extends API_Controller {
 
     public function get_alumni_of_day() {
         
-        // ==========================================
         // 1. SECURITY LAYER: API Key Validation
-        // ==========================================
+        
         $api_key = $this->input->get_request_header('x-api-key', TRUE);
 
         if (!$api_key) {
@@ -26,7 +25,7 @@ class Ar_app extends API_Controller {
 
         $client = $this->db->get_where('api_clients', ['api_key' => $api_key, 'is_active' => 1])->row();
 
-        // CHECK SCOPES: Does this key have the 'read:alumni_of_day' scope?
+        // Checking 'read:alumni_of_day' scope
         if (!$client || strpos($client->scopes, 'read:alumni_of_day') === false) {
             
             // Log the failed access attempt
@@ -43,10 +42,9 @@ class Ar_app extends API_Controller {
         // Log the successful API key validation
         $this->_log_usage($client->id, '/ar_app/get_alumni_of_day');
 
-        // ==========================================
+        
         // 2. LOGIC LAYER: Get Today's Bid Winner
-        // ==========================================
-        $today = date('Y-m-d'); // Gets the current date dynamically
+        $today = date('Y-m-d'); // Gets the current date 
 
         // Join bids and profiles tables to find today's winner
         $this->db->select('p.first_name, p.last_name, p.bio, p.profile_image_url, p.linkedin_url, b.bid_amount');

@@ -88,7 +88,7 @@ class API_Controller extends CI_Controller {
             exit();
         }
 
-        // Optional: You could log the client API usage here as well!
+        
         return $client;
     }
 

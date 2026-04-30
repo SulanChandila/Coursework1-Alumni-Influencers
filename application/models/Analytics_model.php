@@ -151,7 +151,8 @@ class Analytics_model extends CI_Model
         $this->db->limit($limit);
         return $this->db->get()->result_array();
     }
-
+    
+    // Get ALumni List
     public function get_alumni_list($filters = [])
     {
         $this->db->select("
